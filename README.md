@@ -10,6 +10,7 @@
 - SpeechRecognition
 - portaudio
 - pyaudio
+- openAI
 
 # Virtual Environment
 - venv

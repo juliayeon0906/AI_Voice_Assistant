@@ -2,6 +2,9 @@ import speech_recognition as sr
 import time, os
 from gtts import gTTS
 from playsound import playsound
+from gpt import get_gpt_response
+
+running = True
 
 # Speech to Text
 def listen(recognizer, audio):
@@ -17,14 +20,14 @@ def listen(recognizer, audio):
 
 # Answer
 def answer(input_text):
-    answer_text=''
-    if 'hello' in input_text:
-        answer_text = 'Hi, nice to meet you.'
-    elif 'stop' in input_text:
+    global running
+    if 'stop' in input_text.lower():
         answer_text = 'See you next time.'
+        speak(answer_text)
+        running = False
         stop_listening(wait_for_stop=False)
-    else:
-        answer_text = 'Can you say it again?'
+        return
+    answer_text = get_gpt_response(input_text)
     speak(answer_text)
 
 # Text to Speech
@@ -43,5 +46,5 @@ m = sr.Microphone()
 speak('How may I assist you?')
 stop_listening = r.listen_in_background(m, listen)
 
-while True:
+while running:
     time.sleep(0.1)
